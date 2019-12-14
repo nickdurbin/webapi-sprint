@@ -2,13 +2,14 @@ const actions = require('../data/helpers/actionModel');
 const projects = require('../data/helpers/projectModel')
 
 function validateActionId(req, res, next) {
-  actions.get(req.params.id)
+  const { id } = req.params.id
+  actions.get(id)
   .then(action => {
     if (action) {
       req.action = action
       next()
     } else {
-      res.status(404).json({ message: "Invalid action id." })
+      res.status(400).json({ message: "Invalid action id." })
     }
   })
   next()
@@ -27,10 +28,26 @@ function validateAction(req, res, next) {
 }
 
 function validateProject(req, res, next) {
+  const { description, name } = req.body
+  if (Object.keys(req.body).length === 0) {
+    return res.satus(400).json({ message: "Please fill in the actions."})
+  } else if (!description || !name) {
+    return res.status(400).json({ message: "Please fill out the description and name." })
+  }
   next()
 }
 
 function validateProjectId(req, res, next) {
+  const { id } = req.params.id
+  projects.get(id)
+  .then(project => {
+    if (project) {
+      req.project = project
+      next()
+    } else {
+      res.status(400).json({ message: "Invalid project id." })
+    }
+  })
   next()
 };
 
