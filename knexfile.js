@@ -3,7 +3,7 @@ module.exports = {
     client: "sqlite3",
     useNullAsDefault: true,
     connection: {
-      filename: "./data/lambda.db3"
+      filename: "./api/data/lambda.db3"
     },
     pool: {
       afterCreate: (conn, done) => {
@@ -11,10 +11,10 @@ module.exports = {
       }
     },
     migrations: {
-      directory: "./data/migrations"
+      directory: "./api/data/migrations"
     },
     seeds: {
-      directory: "./data/seeds"
+      directory: "./api/data/seeds"
     }
   }
 };
