@@ -2,7 +2,7 @@ const actions = require('../data/helpers/actionModel');
 const projects = require('../data/helpers/projectModel')
 
 function validateActionId(req, res, next) {
-  const { id } = req.params.id
+  const { id } = req.params
   actions.get(id)
   .then(action => {
     if (action) {
@@ -16,12 +16,11 @@ function validateActionId(req, res, next) {
 }
 
 function validateAction(req, res, next) { 
-  const { description, notes } = req.body
-  if (Object.keys(req.body).length === 0) {
+  if (!req.body) {
     return res.satus(400).json({ message: "Please fill in the actions."})
-  } else if (!description || !notes) {
+  } else if (!req.body.description || !req.body.notes) {
     return res.status(400).json({ message: "Please fill out the description and notes." })
-  } else if (description.length > 128) {
+  } else if (req.body.description.length > 128) {
     return res.status(400).json({ message: "Description is too long. Please keep under 128 characters."})
   }
   next()
@@ -38,8 +37,7 @@ function validateProject(req, res, next) {
 }
 
 function validateProjectId(req, res, next) {
-  const { id } = req.params.id
-  projects.get(id)
+  projects.get(req.params.id)
   .then(project => {
     if (project) {
       req.project = project

@@ -1,6 +1,6 @@
 const express = require('express');
 const actions = require('../../data/helpers/actionModel');
-const { validateAction, validateActionId } = require('../../middleware/');
+const { validateAction, validateActionId } = require('../../middleware/validate');
 const router = express.Router({ mergeParams: true });
 
 router.get("/", (req, res, next) => {
@@ -14,10 +14,10 @@ router.get("/", (req, res, next) => {
 })
 
 router.get("/:id", validateActionId, (req, res, next) => {
-  res.json(req.action)
+  return res.json(req.action)
 })
 
-router.post("/:id", validateActionId, validateAction, (req, res, next) => {
+router.post("/", validateActionId, validateAction, (req, res, next) => {
   const { id } = req.params
   const { description, notes } = req.body
 
@@ -31,7 +31,7 @@ router.post("/:id", validateActionId, validateAction, (req, res, next) => {
 })
 
 router.put("/:id", validateActionId, validateAction, (req, res, next) => {
-  const { id } = req.params
+  const { id } = req.action
   const { description, notes } = req.body
 
   actions.update(id, { description, notes })
@@ -44,7 +44,7 @@ router.put("/:id", validateActionId, validateAction, (req, res, next) => {
 })
 
 router.delete("/:id", validateActionId, (req, res, next) => {
-  const { id } = req.params
+  const { id } = req.action
 
   actions.remove(id)
     .then(action => {

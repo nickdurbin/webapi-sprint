@@ -1,7 +1,7 @@
-const actionsRoutes = require("./projects/projectsRouter");
-const projectsRoutes = require("./actions/actionsRouter");
+const actionRoutes = require("./actions/actionRouter");
+const projectRoutes = require("./projects/projectRouter");
 
 module.exports = server => {
-  server.use("/api/actions", actionsRoutes);
-  server.use("/api/projects", projectsRoutes);
+  server.use("/api/actions", actionRoutes);
+  server.use("/api/projects", projectRoutes);
 };
