@@ -44,9 +44,7 @@ router.put("/:id", validateActionId, validateAction, (req, res, next) => {
 })
 
 router.delete("/:id", validateActionId, (req, res, next) => {
-  const { id } = req.action
-
-  actions.remove(id)
+  actions.remove(req.action.id)
     .then(action => {
       return res.status(200).json(action)
     })

@@ -1,52 +1,77 @@
 const actions = require('../data/helpers/actionModel');
 const projects = require('../data/helpers/projectModel')
 
-function validateActionId(req, res, next) {
-  const { id } = req.params
-  actions.get(id)
-  .then(action => {
-    if (action) {
-      req.action = action
-      next()
-    } else {
-      res.status(400).json({ message: "Invalid action id." })
+function validateProjectId() {
+  return (req, res, next) => {
+    projects
+      .get(req.params.id)
+      .then(project => {
+        if (project) {
+          req.project = project;
+          next();
+        } else {
+          res.status(404).json({ message: "Project not found" });
+        }
+      })
+      .catch(error => {
+        next(error);
+      });
+  };
+}
+
+function validateProject() {
+  return (req, res, next) => {
+    if (!req.body) {
+      return res.status(400).json({ message: "missing project data" });
+    } else if (!req.body.name) {
+      return res.status(400).json({ message: "missing required name field" });
+    } else if (!req.body.description) {
+      return res
+        .status(400)
+        .json({ message: "missing required description field" });
     }
-  })
-  next()
+    next();
+  };
 }
 
-function validateAction(req, res, next) { 
-  if (!req.body) {
-    return res.satus(400).json({ message: "Please fill in the actions."})
-  } else if (!req.body.description || !req.body.notes) {
-    return res.status(400).json({ message: "Please fill out the description and notes." })
-  } else if (req.body.description.length > 128) {
-    return res.status(400).json({ message: "Description is too long. Please keep under 128 characters."})
-  }
-  next()
+function validateActionId() {
+  return (req, res, next) => {
+    actions
+      .get(req.params.id)
+      .then(action => {
+        if (action) {
+          req.action = action;
+          next();
+        } else {
+          res.status(404).json({ message: "Action not found" });
+        }
+      })
+      .catch(error => {
+        next(error);
+      });
+  };
 }
 
-function validateProject(req, res, next) {
-  const { description, name } = req.body
-  if (Object.keys(req.body).length === 0) {
-    return res.satus(400).json({ message: "Please fill in the actions."})
-  } else if (!description || !name) {
-    return res.status(400).json({ message: "Please fill out the description and name." })
-  }
-  next()
-}
-
-function validateProjectId(req, res, next) {
-  projects.get(req.params.id)
-  .then(project => {
-    if (project) {
-      req.project = project
-      next()
-    } else {
-      res.status(400).json({ message: "Invalid project id." })
+function validateAction() {
+  return (req, res, next) => {
+    if (!req.body) {
+      return res.status(400).json({ message: "missing action data" });
+    } else if (!req.body.description) {
+      return res
+        .status(400)
+        .json({ message: "missing required description field" });
+    } else if (!req.body.notes) {
+      return res.status(400).json({ message: "missing required notes field" });
     }
-  })
-  next()
+    next();
+  };
+}
+
+module.exports = {
+  validateProjectId,
+  validateProject,
+  validateActionId,
+  validateAction
 };
 
 module.exports = {
