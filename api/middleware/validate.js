@@ -68,12 +68,5 @@ function validateAction() {
 }
 
 module.exports = {
-  validateProjectId,
-  validateProject,
-  validateActionId,
-  validateAction
-};
-
-module.exports = {
   validateActionId, validateAction, validateProject, validateProjectId
 }
