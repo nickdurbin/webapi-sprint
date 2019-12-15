@@ -14,11 +14,11 @@ router.get("/", (req, res, next) => {
     })
 })
 
-router.get("/:id", validateProjectId, (req, res, next) => {
+router.get("/:id", validateProjectId(), (req, res, next) => {
   return res.json(req.project)
 })
 
-router.get("/:id/actions", validateProjectId, validateProject, (req, res, next) => {
+router.get("/:id/actions", validateProjectId(), validateProject(), (req, res, next) => {
   projects.getProjectActions(req.project.id)
     .then(actions => {
       if (actions) {
@@ -30,7 +30,7 @@ router.get("/:id/actions", validateProjectId, validateProject, (req, res, next) 
     })
 })
 
-router.post("/", validateProject, (req, res, next) => {
+router.post("/", validateProject(), (req, res, next) => {
   const { name, description } = req.body
 
   projects.insert({ name, description })
@@ -42,7 +42,7 @@ router.post("/", validateProject, (req, res, next) => {
     })
 })
 
-router.post("/:id/actions", validateProjectId, validateAction,(req, res, next) => {
+router.post("/:id/actions", validateProjectId(), validateAction(),(req, res, next) => {
     const postAction = {
       project_id: req.project.id,
       description: req.body.description,
@@ -60,7 +60,7 @@ router.post("/:id/actions", validateProjectId, validateAction,(req, res, next) =
   }
 );
 
-router.put("/:id", validateProjectId, validateProject, (req, res, next) => {
+router.put("/:id", validateProjectId(), validateProject(), (req, res, next) => {
   projects.update(req.project.id, req.body)
     .then(project => {
       if (project) {
@@ -72,7 +72,7 @@ router.put("/:id", validateProjectId, validateProject, (req, res, next) => {
     ])
 })
 
-router.delete("/:id", validateProjectId, (req, res, next) => {
+router.delete("/:id", validateProjectId(), (req, res, next) => {
   projects.remove(req.project.id)
     .then(project => {
       return res.status(200).json({ message: "Successfully deleted!"})

@@ -13,11 +13,11 @@ router.get("/", (req, res, next) => {
     })
 })
 
-router.get("/:id", validateActionId, (req, res, next) => {
+router.get("/:id", validateActionId(), (req, res, next) => {
   return res.json(req.action)
 })
 
-router.post("/", validateActionId, validateAction, (req, res, next) => {
+router.post("/", validateActionId(), validateAction(), (req, res, next) => {
   const { id } = req.params
   const { description, notes } = req.body
 
@@ -30,7 +30,7 @@ router.post("/", validateActionId, validateAction, (req, res, next) => {
     })
 })
 
-router.put("/:id", validateActionId, validateAction, (req, res, next) => {
+router.put("/:id", validateActionId(), validateAction(), (req, res, next) => {
   const { id } = req.action
   const { description, notes } = req.body
 
@@ -43,7 +43,7 @@ router.put("/:id", validateActionId, validateAction, (req, res, next) => {
     })
 })
 
-router.delete("/:id", validateActionId, (req, res, next) => {
+router.delete("/:id", validateActionId(), (req, res, next) => {
   actions.remove(req.action.id)
     .then(action => {
       return res.status(200).json(action)
